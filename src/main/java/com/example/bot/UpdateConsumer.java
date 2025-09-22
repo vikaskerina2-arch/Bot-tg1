@@ -1,19 +1,12 @@
 package com.example.bot;
 
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
 import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateConsumer;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
-
-import javax.swing.text.html.InlineView;
-import java.util.List;
 
 @Component
 public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
@@ -23,27 +16,51 @@ public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
     public UpdateConsumer(TelegramClient telegramClient) {
         this.telegramClient = telegramClient;
     }
-
+    @SneakyThrows
     @Override
     public void consume(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
-            String messageText = update.getMessage().getText();
+            String text_user = update.getMessage().getText();
             Long chatId = update.getMessage().getChatId();
 
-            // Просто возвращаем введенный текст
-            sendMessage(chatId, "Вы сказали: " + messageText);
+            System.out.println("сообщение: "+ text_user+" от: "+ chatId);
+            String output_text;
+
+            if("/start".equals(text_user)){
+                output_text=StartMessage();
+            }
+            else if("/help".equals(text_user)){
+                output_text=HelpMessage();
+            }
+            else{
+                output_text="Вы ввели: " + text_user;
+            }
+            sendMessage(chatId,output_text);
         }
     }
-
-    private void sendMessage(long chatId, String text) {
+    private String StartMessage(){
+        return " Добро пожаловать в наш первый телеграм бот)\n" +
+                "Он умеет возращать текст, который вы ему напишите.\n" +
+                "Просто отправьте ему текстовое сообщение, и он ответит вам.\n" +
+                "Его команды:\n" +
+                "/start - начать работу\n"+
+                "/help - показать, как я работаю\n";
+    }
+    private String HelpMessage(){
+        return " Справка по работе:\n" +
+                "Бот умеет возращать текст, который вы ему напишите.\n" +
+                "Например: вы пишите \"привет\", он ответит:\n" +
+                "Вы ввели: \"привет\"\n" +
+                "/start - начать работу\n"+
+                "/help - показать, как я работаю\n"+
+                "Попробуйте мне написать!";
+    }
+    private void sendMessage(long chatId, String text) throws TelegramApiException {
         SendMessage message = SendMessage.builder()
                 .chatId(chatId)
                 .text(text)
                 .build();
-        try {
-            telegramClient.execute(message);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
+        telegramClient.execute(message);
+
     }
 }
