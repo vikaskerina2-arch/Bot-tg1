@@ -24,16 +24,16 @@ class UpdateConsumerTest {
 
     @Test
     void testStartCommand() throws TelegramApiException {
-        // Простой тест - можно добавить более сложную логику позже
-        // Пока просто проверяем, что код компилируется и запускается
+        
         assertNotNull(updateConsumer);
         assertNotNull(telegramClient);
     }
 
     @Test
     void testBasicFunctionality() {
-        // Базовый тест для проверки работы
+        
         UpdateConsumer consumer = new UpdateConsumer(telegramClient);
         assertNotNull(consumer);
     }
+
 }
