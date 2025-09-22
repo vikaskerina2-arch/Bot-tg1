@@ -1,6 +1,5 @@
 package com.example.bot;
 
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateConsumer;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -16,7 +15,7 @@ public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
     public UpdateConsumer(TelegramClient telegramClient) {
         this.telegramClient = telegramClient;
     }
-    @SneakyThrows
+
     @Override
     public void consume(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
@@ -35,7 +34,11 @@ public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
             else{
                 output_text="Вы ввели: " + text_user;
             }
-            sendMessage(chatId,output_text);
+            try{
+                sendMessage(chatId,output_text);
+            } catch (Exception e) {
+                System.err.println("Ошибка при отправке сообщения: " + e.getMessage());
+                e.printStackTrace();
         }
     }
     private String StartMessage(){
@@ -60,7 +63,12 @@ public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
                 .chatId(chatId)
                 .text(text)
                 .build();
-        telegramClient.execute(message);
+        try {
+            telegramClient.execute(message);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
 
     }
 }
+
