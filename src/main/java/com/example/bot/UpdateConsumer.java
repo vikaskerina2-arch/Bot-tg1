@@ -39,6 +39,8 @@ public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
             } catch (Exception e) {
                 System.err.println("Ошибка при отправке сообщения: " + e.getMessage());
                 e.printStackTrace();
+            }
+
         }
     }
     private String StartMessage(){
@@ -71,4 +73,3 @@ public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
 
     }
 }
-
