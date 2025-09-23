@@ -43,7 +43,7 @@ public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
 
         }
     }
-    public String StartMessage(){
+    private String StartMessage(){
         return " Добро пожаловать в наш первый телеграм бот)\n" +
                 "Он умеет возращать текст, который вы ему напишите.\n" +
                 "Просто отправьте ему текстовое сообщение, и он ответит вам.\n" +
@@ -51,7 +51,7 @@ public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
                 "/start - начать работу\n"+
                 "/help - показать, как я работаю\n";
     }
-    public String HelpMessage(){
+    private String HelpMessage(){
         return " Справка по работе:\n" +
                 "Бот умеет возращать текст, который вы ему напишите.\n" +
                 "Например: вы пишите \"привет\", он ответит:\n" +
@@ -73,3 +73,4 @@ public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
 
     }
 }
+
